@@ -74,7 +74,7 @@ func (list *List[T]) UnShift(item T) {
 	*(list) = append([]T{item}, *list...)
 }
 
-func Filter[T comparable](list []T, condition func(T) bool) []T {
+func Filter[T any](list []T, condition func(T) bool) []T {
 	filtered := []T{}
 	for _, v := range list {
 		if condition(v) {
@@ -84,7 +84,7 @@ func Filter[T comparable](list []T, condition func(T) bool) []T {
 	return filtered
 }
 
-func Find[T comparable](list []T, condition func(T) bool) (value T, found bool) {
+func Find[T any](list []T, condition func(T) bool) (value T, found bool) {
 	for _, v := range list {
 		if condition(v) {
 			return v, true
@@ -102,7 +102,7 @@ func Index[T comparable](list []T, value T) int {
 	return -1
 }
 
-func Map[T comparable, V any](list []T, f func(T) V) []V {
+func Map[T any, V any](list []T, f func(T) V) []V {
 	mapped := []V{}
 	for _, v := range list {
 		mapped = append(mapped, f(v))
@@ -110,7 +110,7 @@ func Map[T comparable, V any](list []T, f func(T) V) []V {
 	return mapped
 }
 
-func Reduce[T comparable, V any](list []T, f func(V, T) V, acc V) V {
+func Reduce[T any, V any](list []T, f func(V, T) V, acc V) V {
 	for _, v := range list {
 		acc = f(acc, v)
 	}
