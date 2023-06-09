@@ -1,5 +1,9 @@
 package helpers
 
+import (
+	"errors"
+)
+
 type List[T any] []T
 
 func (list *List[T]) Append(item T) {
@@ -133,4 +137,26 @@ func Any(conditions ...bool) bool {
 		}
 	}
 	return false
+}
+
+func Zip[T any](slices ...[]T) ([][]T, error) {
+	var zipped [][]T
+	if len(slices) == 0 {
+		return zipped, errors.New("Zip() expected at least 1 argument but got 0")
+	}
+	x, y := len(slices), len(slices[0])
+	for i := 1; i < y; i++ {
+		if len(slices[i]) != x {
+			return zipped, errors.New("Zip() received slices of different lengths")
+		}
+	}
+	zipped = make([][]T, len(slices))
+	for i := 0; i < len(slices[0]); i++ {
+		z := make([]T, len(slices))
+		for j := 0; j < len(slices); j++ {
+			z[j] = slices[j][i]
+		}
+		zipped[i] = z
+	}
+	return zipped, nil
 }

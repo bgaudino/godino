@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"errors"
 	"strconv"
 	"testing"
 
@@ -249,4 +250,30 @@ func TestAny(t *testing.T) {
 	// Test case 3: No conditions provided
 	result3 := Any()
 	assert.False(t, result3, "failed to evaluate correctly for no conditions provided")
+}
+
+func TestZip(t *testing.T) {
+	// Test case 1: Valid input slices
+	slice1 := []int{1, 2, 3}
+	slice2 := []int{4, 5, 6}
+	slice3 := []int{7, 8, 9}
+	expectedResult := [][]int{
+		{1, 4, 7},
+		{2, 5, 8},
+		{3, 6, 9},
+	}
+	result, err := Zip(slice1, slice2, slice3)
+	assert.Nil(t, err, "Zip() returned an unexpected error")
+	assert.Equal(t, expectedResult, result, "Zip() returned an incorrect result")
+
+	// Test case 2: Slices with different lengths
+	slice4 := []int{10, 11}
+	_, err = Zip(slice1, slice2, slice3, slice4)
+	expectedError := errors.New("Zip() received slices of different lengths")
+	assert.EqualError(t, err, expectedError.Error(), "Zip() did not return the expected error")
+
+	// Test case 3: No input slices
+	_, err = Zip[any]()
+	expectedError = errors.New("Zip() expected at least 1 argument but got 0")
+	assert.EqualError(t, err, expectedError.Error(), "Zip() did not return the expected error")
 }
