@@ -23,33 +23,33 @@ func TestProd(t *testing.T) {
 }
 
 func TestMax(t *testing.T) {
-	t.Run("should return the maximum element and true for a non-empty list", func(t *testing.T) {
-		max, ok := Max(2, 5, 1, 4)
+	t.Run("should return the maximum element and no error for a non-empty list", func(t *testing.T) {
+		max, err := Max(2, 5, 1, 4)
 
 		assert.Equal(t, 5, max)
-		assert.True(t, ok)
+		assert.NoError(t, err)
 	})
 
-	t.Run("should return zero value and false for an empty list", func(t *testing.T) {
-		max, ok := Max[int]()
+	t.Run("should return zero value and and an error for an empty list", func(t *testing.T) {
+		max, err := Max[int]()
 
 		assert.Equal(t, 0, max)
-		assert.False(t, ok)
+		assert.Error(t, err)
 	})
 }
 
 func TestMin(t *testing.T) {
-	t.Run("should return the minimum element and true for a non-empty list", func(t *testing.T) {
-		min, ok := Min(2, 5, 1, 4)
+	t.Run("should return the minimum element and no error for a non-empty list", func(t *testing.T) {
+		min, err := Min(2, 5, 1, 4)
 
 		assert.Equal(t, 1, min)
-		assert.True(t, ok)
+		assert.NoError(t, err)
 	})
 
-	t.Run("should return zero value and false for an empty list", func(t *testing.T) {
-		min, ok := Min[int]()
+	t.Run("should return zero value and an error for an empty list", func(t *testing.T) {
+		min, err := Min[int]()
 
 		assert.Equal(t, 0, min)
-		assert.False(t, ok)
+		assert.Error(t, err)
 	})
 }

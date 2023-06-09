@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"errors"
+
 	"golang.org/x/exp/constraints"
 )
 
@@ -24,22 +26,32 @@ func Prod[T Number](numbers ...T) T {
 	return product
 }
 
-func Max[T constraints.Ordered](elements ...T) (T, bool) {
+func Max[T constraints.Ordered](elements ...T) (T, error) {
 	var max T
-	for i, e := range elements {
-		if i == 0 || e > max {
-			max = e
+	var err error
+	if len(elements) == 0 {
+		err = errors.New("Max() expected at least 1 argument, got 0")
+	} else {
+		for i, e := range elements {
+			if i == 0 || e > max {
+				max = e
+			}
 		}
 	}
-	return max, len(elements) > 0
+	return max, err
 }
 
-func Min[T constraints.Ordered](elements ...T) (T, bool) {
+func Min[T constraints.Ordered](elements ...T) (T, error) {
 	var min T
-	for i, e := range elements {
-		if i == 0 || e < min {
-			min = e
+	var err error
+	if len(elements) == 0 {
+		err = errors.New("Min() expected at least 1 argument, got 0")
+	} else {
+		for i, e := range elements {
+			if i == 0 || e < min {
+				min = e
+			}
 		}
 	}
-	return min, len(elements) > 0
+	return min, err
 }
