@@ -10,6 +10,16 @@ import (
 )
 
 func TestList(t *testing.T) {
+	t.Run("test creating new list from slice", func(t *testing.T) {
+		slice := []int{1, 2, 3}
+		list := NewList(slice...)
+		assert.EqualValues(t, slice, list)
+
+		// list has access to List methods
+		list.Append(4)
+		assert.Contains(t, list, 4)
+	})
+
 	t.Run("should append a value to the end of the list", func(t *testing.T) {
 		list := List[int]{1, 2, 3}
 		list.Append(4)
@@ -22,6 +32,17 @@ func TestList(t *testing.T) {
 		item := list.At(-2)
 		expectedItem := 2
 		assert.Equal(t, expectedItem, item)
+	})
+
+	t.Run("should clear the list", func(t *testing.T) {
+		list := List[int]{1, 2, 3}
+		list.Clear()
+		assert.Empty(t, list)
+	})
+
+	t.Run("should return a copy of the list", func(t *testing.T) {
+		list := List[int]{1, 2, 3}
+		assert.Equal(t, list, list.Copy())
 	})
 
 	t.Run("should add the elements from the given list", func(t *testing.T) {
@@ -103,6 +124,12 @@ func TestIndex(t *testing.T) {
 		expectedIndex := -1
 		assert.Equal(t, expectedIndex, index)
 	})
+}
+
+func TestContains(t *testing.T) {
+	list := NewList(1, 2, 3)
+	assert.True(t, Contains(list, 3))
+	assert.False(t, Contains(list, 0))
 }
 
 func TestFind(t *testing.T) {

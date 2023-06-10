@@ -6,6 +6,12 @@ import (
 
 type List[T any] []T
 
+func NewList[T any](values ...T) List[T] {
+	list := List[T]{}
+	list.Extend(values)
+	return list
+}
+
 func (list *List[T]) Append(item T) {
 	*list = append(*list, item)
 }
@@ -15,6 +21,16 @@ func (list List[T]) At(index int) T {
 		return list[len(list)+index]
 	}
 	return list[index]
+}
+
+func (list *List[T]) Clear() {
+	for len(*list) > 0 {
+		list.Pop()
+	}
+}
+
+func (list List[T]) Copy() List[T] {
+	return NewList(list...)
 }
 
 func (list *List[T]) Extend(items []T) {
@@ -76,6 +92,20 @@ func (list List[T]) Some(f func(T) bool) bool {
 
 func (list *List[T]) UnShift(item T) {
 	*(list) = append([]T{item}, *list...)
+}
+
+func Contains[T comparable](list []T, value T) bool {
+	return Index(list, value) != -1
+}
+
+func Count[T comparable](list []T, value T) int {
+	count := 0
+	for _, item := range list {
+		if item == value {
+			count++
+		}
+	}
+	return count
 }
 
 func Filter[T any](list []T, condition func(T) bool) []T {
