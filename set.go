@@ -1,6 +1,9 @@
 package helpers
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Set[T comparable] map[T]struct{}
 
@@ -20,28 +23,30 @@ func (set Set[T]) Add(values ...T) {
 
 func (set Set[T]) Clear() {
 	for _, v := range set.Members() {
-		delete(set, v)
+		set.Discard(v)
 	}
 }
 
-func (set1 Set[T]) Difference(set2 Set[T]) Set[T] {
-	set3 := NewSet[T]()
-	for value := range set1 {
-		if !set2.Has(value) {
-			set3.Add(value)
-		}
-	}
-	return set3
+func (set Set[T]) Copy() Set[T] {
+	return NewSet(set.Members()...)
+}
+
+func (set Set[T]) Difference(sets ...Set[T]) Set[T] {
+	difference := set.Copy()
+	difference.DifferenceUpdate(sets...)
+	return difference
 }
 
 func (set Set[T]) DifferenceUpdate(sets ...Set[T]) {
 	for _, s := range sets {
-		for _, value := range set.Members() {
-			if s.Has(value) {
-				delete(set, value)
-			}
+		for value := range s {
+			set.Discard(value)
 		}
 	}
+}
+
+func (set Set[T]) Discard(value T) {
+	delete(set, value)
 }
 
 func (set Set[T]) Has(value T) bool {
@@ -49,21 +54,18 @@ func (set Set[T]) Has(value T) bool {
 	return ok
 }
 
-func (set1 Set[T]) Intersection(set2 Set[T]) Set[T] {
-	set3 := NewSet[T]()
-	for value := range set1 {
-		if set2.Has(value) {
-			set3.Add(value)
-		}
-	}
-	return set3
+func (set Set[T]) Intersection(sets ...Set[T]) Set[T] {
+	intersection := set.Copy()
+	intersection.IntersectionUpdate(sets...)
+	return intersection
 }
 
 func (set Set[T]) IntersectionUpdate(sets ...Set[T]) {
-	for _, s := range sets {
-		for _, value := range set.Members() {
+	for value := range set {
+		for _, s := range sets {
 			if !s.Has(value) {
-				delete(set, value)
+				set.Discard(value)
+				break
 			}
 		}
 	}
@@ -106,10 +108,23 @@ func (set Set[T]) Members() []T {
 	return members
 }
 
+func (set Set[T]) Pop() (T, error) {
+	var popped T
+	if len(set) == 0 {
+		return popped, errors.New("cannot pop item from an empty set")
+	}
+	for value := range set {
+		popped = value
+		set.Discard(value)
+		break
+	}
+	return popped, nil
+}
+
 func (set Set[T]) Remove(value T) bool {
 	_, ok := set[value]
 	if ok {
-		delete(set, value)
+		set.Discard(value)
 	}
 	return ok
 }
@@ -132,9 +147,9 @@ func (set Set[T]) SymmetricDifferenceUpdate(sets ...Set[T]) {
 }
 
 func (set1 Set[T]) Union(set2 Set[T]) Set[T] {
-	set3 := NewSet(set1.Members()...)
-	set3.Add(set2.Members()...)
-	return set3
+	union := set1.Copy()
+	union.Add(set2.Members()...)
+	return union
 }
 
 func (set Set[T]) Update(sets ...Set[T]) {
