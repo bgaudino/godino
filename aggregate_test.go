@@ -6,20 +6,36 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSum(t *testing.T) {
-	t.Run("should return the sum of numbers", func(t *testing.T) {
-		sum := Sum(1, 2, 3, 4)
+func TestAll(t *testing.T) {
+	// Test case 1: All conditions are true
+	result1 := All(true, true, true, true)
+	assert.True(t, result1, "failed to evaluate correctly for all true conditions")
 
-		assert.Equal(t, 10, sum)
-	})
+	// Test case 2: Some conditions are false
+	result2 := All(true, false, true, true)
+	assert.False(t, result2, "failed to evaluate correctly for some false conditions")
+
+	// Test case 3: All conditions are false
+	result3 := All(false, false, false)
+	assert.False(t, result3, "failed to evaluate correctly for all false conditions")
+
+	// Test case 4: No conditions provided
+	result4 := All()
+	assert.True(t, result4, "failed to evaluate correctly for no conditions provided")
 }
 
-func TestProd(t *testing.T) {
-	t.Run("should return the product of numbers", func(t *testing.T) {
-		product := Prod(2, 3, 4)
+func TestAny(t *testing.T) {
+	// Test case 1: Some conditions are true
+	result1 := Any(true, false, false, true)
+	assert.True(t, result1, "failed to evaluate correctly for some true conditions")
 
-		assert.Equal(t, 24, product)
-	})
+	// Test case 2: All conditions are false
+	result2 := Any(false, false, false)
+	assert.False(t, result2, "failed to evaluate correctly for all false conditions")
+
+	// Test case 3: No conditions provided
+	result3 := Any()
+	assert.False(t, result3, "failed to evaluate correctly for no conditions provided")
 }
 
 func TestMax(t *testing.T) {
@@ -51,5 +67,21 @@ func TestMin(t *testing.T) {
 
 		assert.Equal(t, 0, min)
 		assert.Error(t, err)
+	})
+}
+
+func TestProd(t *testing.T) {
+	t.Run("should return the product of numbers", func(t *testing.T) {
+		product := Prod(2, 3, 4)
+
+		assert.Equal(t, 24, product)
+	})
+}
+
+func TestSum(t *testing.T) {
+	t.Run("should return the sum of numbers", func(t *testing.T) {
+		sum := Sum(1, 2, 3, 4)
+
+		assert.Equal(t, 10, sum)
 	})
 }

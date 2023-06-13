@@ -10,20 +10,22 @@ type Number interface {
 	constraints.Integer | constraints.Float
 }
 
-func Sum[T Number](numbers ...T) T {
-	var sum T
-	for _, n := range numbers {
-		sum += n
+func All(conditions ...bool) bool {
+	for _, c := range conditions {
+		if !c {
+			return false
+		}
 	}
-	return sum
+	return true
 }
 
-func Prod[T Number](numbers ...T) T {
-	product := T(1)
-	for _, n := range numbers {
-		product *= n
+func Any(conditions ...bool) bool {
+	for _, c := range conditions {
+		if c {
+			return true
+		}
 	}
-	return product
+	return false
 }
 
 func Max[T constraints.Ordered](elements ...T) (T, error) {
@@ -54,4 +56,20 @@ func Min[T constraints.Ordered](elements ...T) (T, error) {
 		}
 	}
 	return min, err
+}
+
+func Prod[T Number](numbers ...T) T {
+	product := T(1)
+	for _, n := range numbers {
+		product *= n
+	}
+	return product
+}
+
+func Sum[T Number](numbers ...T) T {
+	var sum T
+	for _, n := range numbers {
+		sum += n
+	}
+	return sum
 }
