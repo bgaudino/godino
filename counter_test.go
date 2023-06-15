@@ -15,7 +15,7 @@ func TestNewCounter(t *testing.T) {
 func TestCounterAdd(t *testing.T) {
 	c := NewCounter([]string{"foo", "bar", "baz", "foo", "foo", "baz"})
 	c.Add("bar")
-	assert.Equal(t, 2, c.elements["bar"])
+	assert.Equal(t, 2, c.counts["bar"])
 }
 
 func TestGet(t *testing.T) {
