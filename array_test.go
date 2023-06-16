@@ -61,6 +61,26 @@ func TestExtend(t *testing.T) {
 	assert.Equal(t, []int{1, 2, 3, 4, 5, 6}, arr)
 }
 
+func TestForEach(t *testing.T) {
+	arr := []int{1, 2, 3}
+	num := 0
+	f := func(i int, n int) {
+		num += n + i
+	}
+	ForEach(arr, f)
+	assert.Equal(t, 9, num)
+
+}
+
+func TestForEachRef(t *testing.T) {
+	arr := []int{1, 2, 3}
+	f := func(i int, n *int) {
+		*n += i
+	}
+	ForEachRef(arr, f)
+	assert.Equal(t, []int{1, 3, 5}, arr)
+}
+
 func TestFilter(t *testing.T) {
 	arr := []int{1, 2, 3, 4, 5}
 
@@ -132,7 +152,7 @@ func TestMap(t *testing.T) {
 	expected := []int{1, 4, 9, 16, 25}
 	assert.Equal(t, expected, mapped, "failed to map numbers to their squares")
 
-	mappedString := Map[int, string](arr, func(num int) string {
+	mappedString := Map(arr, func(num int) string {
 		return "Number: " + strconv.Itoa(num)
 	})
 	expectedStrings := []string{"Number: 1", "Number: 2", "Number: 3", "Number: 4", "Number: 5"}
@@ -234,18 +254,18 @@ func TestZip(t *testing.T) {
 		{2, 5, 8},
 		{3, 6, 9},
 	}
-	result, err := Zip(slice1, slice2, slice3)
+	result, err := Zip[[]int, int](slice1, slice2, slice3)
 	assert.Nil(t, err, "Zip() returned an unexpected error")
 	assert.Equal(t, expectedResult, result, "Zip() returned an incorrect result")
 
 	// Test case 2: Slices with different lengths
 	slice4 := []int{10, 11}
-	_, err = Zip(slice1, slice2, slice3, slice4)
+	_, err = Zip[[]int, int](slice1, slice2, slice3, slice4)
 	expectedError := errors.New("Zip() received slices of different lengths")
 	assert.EqualError(t, err, expectedError.Error(), "Zip() did not return the expected error")
 
 	// Test case 3: No input slices
-	_, err = Zip[any]()
+	_, err = Zip[[]int, int]()
 	expectedError = errors.New("Zip() expected at least 1 argument but got 0")
 	assert.EqualError(t, err, expectedError.Error(), "Zip() did not return the expected error")
 }

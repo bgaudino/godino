@@ -4,27 +4,27 @@ import (
 	"errors"
 )
 
-func Append[T any](arr *([]T), value T) {
+func Append[L ~[]T, T any](arr *L, value T) {
 	*arr = append(*arr, value)
 }
 
-func Clear[T any](arr *([]T)) {
+func Clear[L ~[]T, T any](arr *L) {
 	for len(*arr) > 0 {
 		Pop(arr)
 	}
 }
 
-func Contains[T comparable](arr []T, value T) bool {
+func Contains[L ~[]T, T comparable](arr L, value T) bool {
 	return Index(arr, value) != -1
 }
 
-func Copy[T any](arr []T) []T {
+func Copy[L ~[]T, T any](arr L) L {
 	arr2 := make([]T, len(arr))
 	copy(arr2, arr)
 	return arr2
 }
 
-func Count[T comparable](arr []T, value T) int {
+func Count[L ~[]T, T comparable](arr L, value T) int {
 	count := 0
 	for _, item := range arr {
 		if item == value {
@@ -34,11 +34,11 @@ func Count[T comparable](arr []T, value T) int {
 	return count
 }
 
-func Extend[T any](arr *([]T), items []T) {
+func Extend[L ~[]T, T any](arr *L, items []T) {
 	*arr = append(*arr, items...)
 }
 
-func Every[T any](arr []T, f func(T) bool) bool {
+func Every[L ~[]T, T any](arr L, f func(T) bool) bool {
 	for _, v := range arr {
 		if !f(v) {
 			return false
@@ -47,7 +47,19 @@ func Every[T any](arr []T, f func(T) bool) bool {
 	return true
 }
 
-func Filter[T any](arr []T, condition func(T) bool) []T {
+func ForEach[L ~[]T, T any](arr L, f func(index int, value T)) {
+	for i := 0; i < len(arr); i++ {
+		f(i, arr[i])
+	}
+}
+
+func ForEachRef[L ~[]T, T any](arr L, f func(index int, value *T)) {
+	for i := 0; i < len(arr); i++ {
+		f(i, &arr[i])
+	}
+}
+
+func Filter[L ~[]T, T any](arr L, condition func(T) bool) []T {
 	filtered := []T{}
 	for _, v := range arr {
 		if condition(v) {
@@ -57,7 +69,7 @@ func Filter[T any](arr []T, condition func(T) bool) []T {
 	return filtered
 }
 
-func Find[T any](arr []T, condition func(T) bool) (value T, found bool) {
+func Find[L ~[]T, T any](arr L, condition func(T) bool) (value T, found bool) {
 	for _, v := range arr {
 		if condition(v) {
 			return v, true
@@ -66,7 +78,7 @@ func Find[T any](arr []T, condition func(T) bool) (value T, found bool) {
 	return value, false
 }
 
-func Index[T comparable](arr []T, value T) int {
+func Index[L ~[]T, T comparable](arr L, value T) int {
 	for i, v := range arr {
 		if v == value {
 			return i
@@ -75,11 +87,11 @@ func Index[T comparable](arr []T, value T) int {
 	return -1
 }
 
-func Insert[T any](arr *([]T), value T, index int) {
+func Insert[L ~[]T, T any](arr *L, value T, index int) {
 	*arr = append((*arr)[:index], append([]T{value}, (*arr)[index:]...)...)
 }
 
-func Map[T any, V any](arr []T, f func(T) V) []V {
+func Map[L ~[]T, T any, V any](arr L, f func(T) V) []V {
 	mapped := []V{}
 	for _, v := range arr {
 		mapped = append(mapped, f(v))
@@ -87,24 +99,24 @@ func Map[T any, V any](arr []T, f func(T) V) []V {
 	return mapped
 }
 
-func Pop[T any](arr *([]T)) T {
+func Pop[L ~[]T, T any](arr *L) T {
 	return Remove(arr, len(*arr)-1)
 }
 
-func Reduce[T any, V any](arr []T, f func(V, T) V, acc V) V {
+func Reduce[L ~[]T, T any, V any](arr L, f func(V, T) V, acc V) V {
 	for _, v := range arr {
 		acc = f(acc, v)
 	}
 	return acc
 }
 
-func Remove[T any](arr *([]T), index int) T {
+func Remove[L ~[]T, T any](arr *L, index int) T {
 	value := (*arr)[index]
 	*arr = append((*arr)[:index], (*arr)[index+1:]...)
 	return value
 }
 
-func Reverse[T any](arr *([]T)) {
+func Reverse[L ~[]T, T any](arr *L) {
 	start, end := 0, len(*arr)-1
 	for start < end {
 		(*arr)[start], (*arr)[end] = (*arr)[end], (*arr)[start]
@@ -113,11 +125,11 @@ func Reverse[T any](arr *([]T)) {
 	}
 }
 
-func Shift[T any](arr *([]T)) T {
+func Shift[L ~[]T, T any](arr *L) T {
 	return Remove(arr, 0)
 }
 
-func Some[T any](arr []T, f func(T) bool) bool {
+func Some[L ~[]T, T any](arr L, f func(T) bool) bool {
 	for _, v := range arr {
 		if f(v) {
 			return true
@@ -126,18 +138,18 @@ func Some[T any](arr []T, f func(T) bool) bool {
 	return false
 }
 
-func UnShift[T any](arr *([]T), value T) {
+func UnShift[L ~[]T, T any](arr *L, value T) {
 	*arr = append([]T{value}, *arr...)
 }
 
-func ValueAt[T any](arr []T, index int) T {
+func ValueAt[L ~[]T, T any](arr L, index int) T {
 	if index < 0 {
 		return arr[len(arr)+index]
 	}
 	return arr[index]
 }
 
-func Zip[T any](arrs ...[]T) ([][]T, error) {
+func Zip[L ~[]T, T any](arrs ...[]T) ([][]T, error) {
 	var zipped [][]T
 	if len(arrs) == 0 {
 		return zipped, errors.New("Zip() expected at least 1 argument but got 0")
