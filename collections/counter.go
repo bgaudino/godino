@@ -1,9 +1,10 @@
-package helpers
+package collections
 
 import (
 	"fmt"
 	"sort"
 
+	"github.com/bgaudino/go-helpers/math"
 	"golang.org/x/exp/maps"
 )
 
@@ -101,7 +102,7 @@ func (c *(Counter[T])) Subtract(value T) {
 }
 
 func (c Counter[T]) Total() int {
-	return Sum(maps.Values(c.counts)...)
+	return math.Sum(maps.Values(c.counts)...)
 }
 
 func (c *(Counter[T])) Update(arrs ...[]T) {

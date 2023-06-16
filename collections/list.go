@@ -1,93 +1,95 @@
-package helpers
+package collections
+
+import "github.com/bgaudino/go-helpers/functools"
 
 type List[T any] []T
 
 type ComparableList[T comparable] List[T]
 
 func (list *List[T]) Append(value T) {
-	Append(list, value)
+	functools.Append(list, value)
 }
 
 func (list List[T]) At(index int) T {
-	return ValueAt(list, index)
+	return functools.ValueAt(list, index)
 }
 
 func (list *List[T]) Clear() {
-	Clear(list)
+	functools.Clear(list)
 }
 
 func (list ComparableList[T]) Contains(value T) bool {
-	return Contains(list, value)
+	return functools.Contains(list, value)
 }
 
 func (list List[T]) Copy() List[T] {
-	return Copy(list)
+	return functools.Copy(list)
 }
 
 func (list ComparableList[T]) Count(value T) int {
-	return Count(list, value)
+	return functools.Count(list, value)
 }
 
 func (list *List[T]) Extend(items []T) {
-	Extend(list, items)
+	functools.Extend(list, items)
 }
 
 func (list ComparableList[T]) Every(f func(T) bool) bool {
-	return Every(list, f)
+	return functools.Every(list, f)
 }
 
 func (list List[T]) ForEach(f func(int, T)) {
-	ForEach(list, f)
+	functools.ForEach(list, f)
 }
 
 func (list List[T]) ForEachRef(f func(int, *T)) {
-	ForEachRef(list, f)
+	functools.ForEachRef(list, f)
 }
 
 func (list ComparableList[T]) Filter(f func(T) bool) ComparableList[T] {
-	return Filter(list, f)
+	return functools.Filter(list, f)
 }
 
 func (list List[T]) Find(f func(T) bool) (value T, found bool) {
-	return Find(list, f)
+	return functools.Find(list, f)
 }
 
 func (list ComparableList[T]) Index(value T) int {
-	return Index(list, value)
+	return functools.Index(list, value)
 }
 
 func (list *List[T]) Insert(value T, index int) {
-	Insert(list, value, index)
+	functools.Insert(list, value, index)
 }
 
 func (list List[T]) Map(f func(T) any) []any {
-	return Map(list, f)
+	return functools.Map(list, f)
 }
 
 func (list *List[T]) Pop() T {
-	return Pop(list)
+	return functools.Pop(list)
 }
 
 func (list List[T]) Reduce(f func(any, T) any, acc any) any {
-	return Reduce(list, f, acc)
+	return functools.Reduce(list, f, acc)
 }
 
 func (list *List[T]) Remove(index int) T {
-	return Remove(list, index)
+	return functools.Remove(list, index)
 }
 
 func (list *List[T]) Reverse() {
-	Reverse(list)
+	functools.Reverse(list)
 }
 
 func (list *List[T]) Shift() T {
-	return Shift(list)
+	return functools.Shift(list)
 }
 
 func (list List[T]) Some(f func(T) bool) bool {
-	return Some(list, f)
+	return functools.Some(list, f)
 }
 
 func (list *List[T]) UnShift(value T) {
-	UnShift(list, value)
+	functools.UnShift(list, value)
 }

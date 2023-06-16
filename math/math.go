@@ -1,4 +1,4 @@
-package helpers
+package math
 
 import (
 	"errors"
@@ -7,25 +7,7 @@ import (
 )
 
 type Number interface {
-	constraints.Integer | constraints.Float
-}
-
-func All(conditions ...bool) bool {
-	for _, c := range conditions {
-		if !c {
-			return false
-		}
-	}
-	return true
-}
-
-func Any(conditions ...bool) bool {
-	for _, c := range conditions {
-		if c {
-			return true
-		}
-	}
-	return false
+	constraints.Integer | constraints.Float | constraints.Complex
 }
 
 func Max[T constraints.Ordered](elements ...T) (T, error) {

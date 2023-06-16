@@ -1,4 +1,4 @@
-package helpers
+package functools
 
 import (
 	"errors"
@@ -38,46 +38,6 @@ func Extend[L ~[]T, T any](arr *L, items []T) {
 	*arr = append(*arr, items...)
 }
 
-func Every[L ~[]T, T any](arr L, f func(T) bool) bool {
-	for _, v := range arr {
-		if !f(v) {
-			return false
-		}
-	}
-	return true
-}
-
-func ForEach[L ~[]T, T any](arr L, f func(index int, value T)) {
-	for i := 0; i < len(arr); i++ {
-		f(i, arr[i])
-	}
-}
-
-func ForEachRef[L ~[]T, T any](arr L, f func(index int, value *T)) {
-	for i := 0; i < len(arr); i++ {
-		f(i, &arr[i])
-	}
-}
-
-func Filter[L ~[]T, T any](arr L, condition func(T) bool) []T {
-	filtered := []T{}
-	for _, v := range arr {
-		if condition(v) {
-			filtered = append(filtered, v)
-		}
-	}
-	return filtered
-}
-
-func Find[L ~[]T, T any](arr L, condition func(T) bool) (value T, found bool) {
-	for _, v := range arr {
-		if condition(v) {
-			return v, true
-		}
-	}
-	return value, false
-}
-
 func Index[L ~[]T, T comparable](arr L, value T) int {
 	for i, v := range arr {
 		if v == value {
@@ -91,23 +51,8 @@ func Insert[L ~[]T, T any](arr *L, value T, index int) {
 	*arr = append((*arr)[:index], append([]T{value}, (*arr)[index:]...)...)
 }
 
-func Map[L ~[]T, T any, V any](arr L, f func(T) V) []V {
-	mapped := []V{}
-	for _, v := range arr {
-		mapped = append(mapped, f(v))
-	}
-	return mapped
-}
-
 func Pop[L ~[]T, T any](arr *L) T {
 	return Remove(arr, len(*arr)-1)
-}
-
-func Reduce[L ~[]T, T any, V any](arr L, f func(V, T) V, acc V) V {
-	for _, v := range arr {
-		acc = f(acc, v)
-	}
-	return acc
 }
 
 func Remove[L ~[]T, T any](arr *L, index int) T {
@@ -127,15 +72,6 @@ func Reverse[L ~[]T, T any](arr *L) {
 
 func Shift[L ~[]T, T any](arr *L) T {
 	return Remove(arr, 0)
-}
-
-func Some[L ~[]T, T any](arr L, f func(T) bool) bool {
-	for _, v := range arr {
-		if f(v) {
-			return true
-		}
-	}
-	return false
 }
 
 func UnShift[L ~[]T, T any](arr *L, value T) {
