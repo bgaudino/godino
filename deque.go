@@ -29,7 +29,7 @@ func (d Deque[T]) Capacity() int {
 	return len(d.store)
 }
 
-func (d *(Deque[T])) Clear() {
+func (d *Deque[T]) Clear() {
 	d.store = make([]T, d.initialCapacity)
 	d.head, d.tail, d.length = 0, 0, 0
 }
@@ -44,7 +44,7 @@ func (d Deque[T]) decrement(n int) int {
 	return (n - 1 + len(d.store)) % len(d.store)
 }
 
-func (d *(Deque[T])) growIfFull() {
+func (d *Deque[T]) growIfFull() {
 	capacity := len(d.store)
 	if d.length == capacity {
 		d.resize(capacity * 2)
@@ -59,7 +59,7 @@ func (d Deque[T]) Elements() []T {
 	return elements
 }
 
-func (d *(Deque[T])) growIfExtendWouldMakeFull(size int) {
+func (d *Deque[T]) growIfExtendWouldMakeFull(size int) {
 	capacity := len(d.store)
 	for capacity < d.length+size {
 		capacity *= 2
@@ -69,14 +69,14 @@ func (d *(Deque[T])) growIfExtendWouldMakeFull(size int) {
 	}
 }
 
-func (d *(Deque[T])) ExtendLeft(arr []T) {
+func (d *Deque[T]) ExtendLeft(arr []T) {
 	d.growIfExtendWouldMakeFull(len(arr))
 	for _, v := range arr {
 		d.PushLeft(v)
 	}
 }
 
-func (d *(Deque[T])) ExtendRight(arr []T) {
+func (d *Deque[T]) ExtendRight(arr []T) {
 	d.growIfExtendWouldMakeFull(len(arr))
 	for _, v := range arr {
 		d.PushRight(v)
@@ -98,15 +98,15 @@ func (d Deque[T]) Index(nums ...int) []T {
 	return elements
 }
 
-func (d *(Deque[T])) Len() int {
+func (d *Deque[T]) Len() int {
 	return d.length
 }
 
-func (d *(Deque[T])) PeekLeft() T {
+func (d *Deque[T]) PeekLeft() T {
 	return d.store[d.head%len(d.store)]
 }
 
-func (d *(Deque[T])) PopLeft() T {
+func (d *Deque[T]) PopLeft() T {
 	value := d.store[d.head%len(d.store)]
 	var dummy T
 	d.store[d.head%len(d.store)] = dummy
@@ -116,11 +116,11 @@ func (d *(Deque[T])) PopLeft() T {
 	return value
 }
 
-func (d *(Deque[T])) PeekRight() T {
+func (d *Deque[T]) PeekRight() T {
 	return d.store[d.decrement(d.tail)]
 }
 
-func (d *(Deque[T])) PopRight() T {
+func (d *Deque[T]) PopRight() T {
 	newTail := d.decrement(d.tail)
 	value := d.store[newTail]
 	var dummy T
@@ -131,21 +131,21 @@ func (d *(Deque[T])) PopRight() T {
 	return value
 }
 
-func (d *(Deque[T])) PushRight(value T) {
+func (d *Deque[T]) PushRight(value T) {
 	d.growIfFull()
 	d.store[d.tail%len(d.store)] = value
 	d.tail = d.increment(d.tail)
 	d.length++
 }
 
-func (d *(Deque[T])) PushLeft(value T) {
+func (d *Deque[T]) PushLeft(value T) {
 	d.growIfFull()
 	d.head = d.decrement(d.head)
 	d.store[d.head] = value
 	d.length++
 }
 
-func (d *(Deque[T])) resize(size int) {
+func (d *Deque[T]) resize(size int) {
 	newStore := make([]T, size)
 	for i := 0; i <= d.length; i++ {
 		newStore[i] = d.store[(d.head+i)%len(d.store)]
@@ -155,14 +155,14 @@ func (d *(Deque[T])) resize(size int) {
 	d.tail = d.length
 }
 
-func (d *(Deque[T])) shrinkIfSparse() {
+func (d *Deque[T]) shrinkIfSparse() {
 	capacity := len(d.store)
 	if d.length <= capacity/4 {
 		d.resize(capacity / 2)
 	}
 }
 
-func (d *(Deque[T])) Reverse() {
+func (d *Deque[T]) Reverse() {
 	if d.length == 0 {
 		return
 	}
@@ -179,7 +179,7 @@ func (d Deque[T]) String() string {
 	return fmt.Sprintf("%v", d.Elements())
 }
 
-func (d *(Deque[T])) Rotate(n int) {
+func (d *Deque[T]) Rotate(n int) {
 	if n < 0 {
 		n = 0 - n
 		for i := 0; i < n%d.length; i++ {
