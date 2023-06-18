@@ -5,11 +5,11 @@ import (
 )
 
 type Deque[T any] struct {
-	store           []T
-	head            int
-	tail            int
-	length          int
-	initialCapacity int
+	store       []T
+	head        int
+	tail        int
+	length      int
+	minCapacity int
 }
 
 func NewDeque[T any](capacity ...int) *Deque[T] {
@@ -20,8 +20,8 @@ func NewDeque[T any](capacity ...int) *Deque[T] {
 		}
 	}
 	return &Deque[T]{
-		store:           make([]T, cap),
-		initialCapacity: cap,
+		store:       make([]T, cap),
+		minCapacity: cap,
 	}
 }
 
@@ -30,7 +30,7 @@ func (d Deque[T]) Capacity() int {
 }
 
 func (d *Deque[T]) Clear() {
-	d.store = make([]T, d.initialCapacity)
+	d.store = make([]T, d.minCapacity)
 	d.head, d.tail, d.length = 0, 0, 0
 }
 
@@ -46,7 +46,7 @@ func (d Deque[T]) decrement(n int) int {
 
 func (d *Deque[T]) growIfFull() {
 	capacity := len(d.store)
-	if d.length == capacity {
+	if d.length >= capacity {
 		d.resize(capacity * 2)
 	}
 }
@@ -157,8 +157,15 @@ func (d *Deque[T]) resize(size int) {
 
 func (d *Deque[T]) shrinkIfSparse() {
 	capacity := len(d.store)
+	if capacity <= d.minCapacity {
+		return
+	}
 	if d.length <= capacity/4 {
-		d.resize(capacity / 2)
+		size := capacity / 2
+		if size < d.minCapacity {
+			size = d.minCapacity
+		}
+		d.resize(size)
 	}
 }
 
