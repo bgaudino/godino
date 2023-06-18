@@ -2,7 +2,9 @@ package helpers
 
 type List[T any] []T
 
-type ComparableList[T comparable] List[T]
+type ComparableList[T comparable] struct {
+	List[T]
+}
 
 func (list *List[T]) Append(value T) {
 	Append(list, value)
@@ -17,7 +19,7 @@ func (list *List[T]) Clear() {
 }
 
 func (list ComparableList[T]) Contains(value T) bool {
-	return Contains(list, value)
+	return Contains(list.List, value)
 }
 
 func (list List[T]) Copy() List[T] {
@@ -25,7 +27,7 @@ func (list List[T]) Copy() List[T] {
 }
 
 func (list ComparableList[T]) Count(value T) int {
-	return Count(list, value)
+	return Count(list.List, value)
 }
 
 func (list *List[T]) Extend(items []T) {
@@ -33,7 +35,7 @@ func (list *List[T]) Extend(items []T) {
 }
 
 func (list ComparableList[T]) Every(f func(T) bool) bool {
-	return Every(list, f)
+	return Every(list.List, f)
 }
 
 func (list List[T]) ForEach(f func(int, T)) {
@@ -44,8 +46,8 @@ func (list List[T]) ForEachRef(f func(int, *T)) {
 	ForEachRef(list, f)
 }
 
-func (list ComparableList[T]) Filter(f func(T) bool) ComparableList[T] {
-	return Filter(list, f)
+func (list ComparableList[T]) Filter(f func(T) bool) List[T] {
+	return Filter(list.List, f)
 }
 
 func (list List[T]) Find(f func(T) bool) (value T, found bool) {
@@ -53,7 +55,7 @@ func (list List[T]) Find(f func(T) bool) (value T, found bool) {
 }
 
 func (list ComparableList[T]) Index(value T) int {
-	return Index(list, value)
+	return Index(list.List, value)
 }
 
 func (list *List[T]) Insert(value T, index int) {
