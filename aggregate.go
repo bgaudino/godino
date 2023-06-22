@@ -7,9 +7,10 @@ import (
 )
 
 type Number interface {
-	constraints.Integer | constraints.Float
+	constraints.Integer | constraints.Float | constraints.Complex
 }
 
+// Returns true if all of the given conditions are true
 func All(conditions ...bool) bool {
 	for _, c := range conditions {
 		if !c {
@@ -19,6 +20,7 @@ func All(conditions ...bool) bool {
 	return true
 }
 
+// Returns true if at least one of the given conditions are true
 func Any(conditions ...bool) bool {
 	for _, c := range conditions {
 		if c {
@@ -28,6 +30,8 @@ func Any(conditions ...bool) bool {
 	return false
 }
 
+// Returns the higest value of the given arguments. Returns an error if no
+// arguments are given.
 func Max[T constraints.Ordered](elements ...T) (T, error) {
 	var max T
 	var err error
@@ -43,6 +47,8 @@ func Max[T constraints.Ordered](elements ...T) (T, error) {
 	return max, err
 }
 
+// Returns the lowest value of the given arguments. Returns an error if no
+// arguments are given.
 func Min[T constraints.Ordered](elements ...T) (T, error) {
 	var min T
 	var err error
@@ -58,6 +64,7 @@ func Min[T constraints.Ordered](elements ...T) (T, error) {
 	return min, err
 }
 
+// Multiplies the given numeric arguments and returns the product
 func Prod[T Number](numbers ...T) T {
 	product := T(1)
 	for _, n := range numbers {
@@ -66,6 +73,7 @@ func Prod[T Number](numbers ...T) T {
 	return product
 }
 
+// Adds the given numeric arguments and returns the sum
 func Sum[T Number](numbers ...T) T {
 	var sum T
 	for _, n := range numbers {
