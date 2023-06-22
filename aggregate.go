@@ -30,7 +30,7 @@ func Any(conditions ...bool) bool {
 	return false
 }
 
-// Returns the higest value of the given arguments. Returns an error if no
+// Returns the highest value of the given arguments. Returns an error if no
 // arguments are given.
 func Max[T constraints.Ordered](elements ...T) (T, error) {
 	var max T
