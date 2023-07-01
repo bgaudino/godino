@@ -1,6 +1,9 @@
 package helpers
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 func ExampleDict_Clear() {
 	d := Dict[int, string]{1: "foo"}
@@ -44,7 +47,9 @@ func ExampleDict_Items() {
 		2: "bar",
 		3: "baz",
 	}
-	fmt.Println(d.Items())
+	items := d.Items()
+	sort.Slice(items, func(i, j int) bool { return items[i].Key < items[j].Key })
+	fmt.Println(items)
 	// Output:
 	// [{1 foo} {2 bar} {3 baz}]
 }
@@ -55,7 +60,10 @@ func ExampleDict_Keys() {
 		2: "bar",
 		3: "baz",
 	}
-	fmt.Println(d.Keys())
+
+	keys := d.Keys()
+	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
+	fmt.Println(keys)
 	// Output:
 	// [1 2 3]
 }
@@ -94,7 +102,12 @@ func ExampleDict_SetDefault() {
 		3: "bar",
 	}
 	d.Update(d2)
-	fmt.Println(d.Items())
+
+	items := d.Items()
+	sort.Slice(items, func(i, j int) bool {
+		return items[i].Key < items[j].Key
+	})
+	fmt.Println(items)
 	// Output:
 	// [{1 foo} {2 baz} {3 bar}]
 }
@@ -105,7 +118,9 @@ func ExampleDict_Values() {
 		2: "bar",
 		3: "baz",
 	}
-	fmt.Println(d.Values())
+	values := d.Values()
+	sort.Slice(values, func(i, j int) bool { return values[i] < values[j] })
+	fmt.Println(values)
 	// Output:
-	// [foo bar baz]
+	// [bar baz foo]
 }
