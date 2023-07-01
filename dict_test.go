@@ -48,9 +48,9 @@ func TestDict(t *testing.T) {
 		dict := getDict()
 		items := dict.Items()
 		expectedItems := []DictItem[string, int]{
-			{key: "apple", value: 5},
-			{key: "banana", value: 3},
-			{key: "orange", value: 2},
+			{Key: "apple", Value: 5},
+			{Key: "banana", Value: 3},
+			{Key: "orange", Value: 2},
 		}
 		assert.ElementsMatch(t, expectedItems, items)
 
