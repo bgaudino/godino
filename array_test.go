@@ -159,6 +159,15 @@ func TestMap(t *testing.T) {
 	assert.Equal(t, expectedStrings, mappedString, "failed to map numbers to strings")
 }
 
+func TestMembersEqual(t *testing.T) {
+	arr1 := []int{1, 2, 3, 4, 3, 2, 1}
+	arr2 := []int{1, 1, 2, 2, 3, 3, 4}
+	assert.True(t, MembersMatch(arr1, arr2))
+
+	arr2 = append(arr2, 4)
+	assert.False(t, MembersMatch(arr1, arr2))
+}
+
 func TestPopArray(t *testing.T) {
 	arr := []int{1, 2, 3}
 	popped := Pop(&arr)

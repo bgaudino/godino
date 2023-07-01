@@ -2,6 +2,8 @@ package helpers
 
 import (
 	"errors"
+
+	"golang.org/x/exp/maps"
 )
 
 func Append[L ~[]T, T any](arr *L, value T) {
@@ -97,6 +99,11 @@ func Map[L ~[]T, T any, V any](arr L, f func(T) V) []V {
 		mapped = append(mapped, f(v))
 	}
 	return mapped
+}
+
+func MembersMatch[L ~[]T, T comparable](arr1 L, arr2 L) bool {
+	c1, c2 := NewCounter(arr1), NewCounter(arr2)
+	return maps.Equal(c1.counts, c2.counts)
 }
 
 func Pop[L ~[]T, T any](arr *L) T {
