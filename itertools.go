@@ -13,6 +13,7 @@ func generateCombinations[T any](arr []T, length int, combination []T, results c
 	}
 }
 
+// Returns an iterable containing all possible subsets of the array of the given length
 func Combinations[T any](arr []T, length int) <-chan []T {
 	results := make(chan []T)
 	go func() {
@@ -41,6 +42,8 @@ func permutations[T any](arr []T, start, end int, length int, results chan []T) 
 	}
 }
 
+// Returns an iterable containing all possible orderings of subsets of array of the given length.
+// If -1 is provided for the length, the length of the array is used.
 func Permutations[T any](arr []T, length int) <-chan []T {
 	if length == -1 {
 		length = len(arr)
@@ -53,14 +56,6 @@ func Permutations[T any](arr []T, length int) <-chan []T {
 	return results
 }
 
-func PermutationsList[T any](arr []T, length int) [][]T {
-	perms := [][]T{}
-	for perm := range Permutations(arr, length) {
-		perms = append(perms, perm)
-	}
-	return perms
-}
-
 func factorial(n int) int {
 	if n <= 1 {
 		return 1
@@ -68,10 +63,12 @@ func factorial(n int) int {
 	return n * factorial(n-1)
 }
 
+// Returns the number of permutations of the array
 func NumPermutations[T any](arr []T) int {
 	return factorial(len(arr))
 }
 
+// Converts a channel used as a generator to an array
 func GeneratorToArray[T any](c <-chan []T) [][]T {
 	arr := [][]T{}
 	for item := range c {
