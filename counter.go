@@ -8,13 +8,13 @@ import (
 )
 
 type counterElement[T comparable] struct {
-	element T
-	count   int
+	Element T
+	Count   int
 }
 type counterElements[T comparable] []counterElement[T]
 
 func (l counterElements[T]) Less(i, j int) bool {
-	switch diff := l[i].count - l[j].count; {
+	switch diff := l[i].Count - l[j].Count; {
 	case diff < 0:
 		return false
 	case diff > 0:
@@ -68,8 +68,8 @@ func (c *Counter[T]) Elements() counterElements[T] {
 		elements := counterElements[T]{}
 		for _, k := range c.keys {
 			elements = append(elements, counterElement[T]{
-				element: k,
-				count:   c.counts[k],
+				Element: k,
+				Count:   c.counts[k],
 			})
 		}
 		c.elements = elements
