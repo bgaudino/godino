@@ -1,4 +1,4 @@
-module github.com/bgaudino/go-helpers
+module github.com/bgaudino/godino
 
 go 1.19
 

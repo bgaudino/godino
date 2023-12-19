@@ -1,4 +1,4 @@
-package helpers
+package godino
 
 func generateCombinations[T any](arr []T, length int, combination []T, results chan []T) {
 	if length == 0 {
