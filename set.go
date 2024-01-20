@@ -59,7 +59,17 @@ func (set Set[T]) Discard(value T) {
 
 // Returns true if the sets contain the same members regardless of order
 func (set Set[T]) Equals(set2 Set[T]) bool {
-	return len(set.SymmetricDifference(set2)) == 0
+	for value := range set {
+		if !set2.Has(value) {
+			return false
+		}
+	}
+	for value := range set2 {
+		if !set.Has(value) {
+			return false
+		}
+	}
+	return true
 }
 
 // Returns true if the set contins the specified element
